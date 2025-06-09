@@ -1,0 +1,40 @@
+# Byte‐compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints and outputs
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+*.nbconvert.ipynb
+
+# Virtual environments
+env/
+venv/
+.env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data folders (raw + processed)
+data/images/
+data/profilometer/raw/
+data/profilometer/processed/
+
+# Results outputs
+results/figures/
+results/tables/
+
+# Log files
+*.log
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# PDF or other large docs you don't want versioned
+*.pdf
+
+# Miscellaneous
+*.bmp
