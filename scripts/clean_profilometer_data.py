@@ -30,7 +30,7 @@ def clean_profilometer_csv(input_path: Path, sep: str, skiprows: int) -> pd.Data
     return df.dropna(subset=["Height"])[["Position","Height"]].reset_index(drop=True)
 
 def main():
-    project_root = Path(__file__).parent.parent  # adjust if script lives elsewhere
+    project_root = Path(__file__).parent.parent
     raw_dir  = project_root / "data" / "profilometer" / "raw"
     proc_dir = project_root / "data" / "profilometer" / "processed"
     proc_dir.mkdir(parents=True, exist_ok=True)
@@ -41,7 +41,7 @@ def main():
         "40s.csv": {"sep": "\t", "skiprows": 12}
     }
 
-    # 1) CLEAN step
+    # CLEAN step
     for fname, cfg in file_params.items():
         infile  = raw_dir  / fname
         outfile = proc_dir / fname
@@ -52,9 +52,9 @@ def main():
             skiprows=cfg["skiprows"]
         )
         df_clean.to_csv(outfile, index=False)
-        print(f"✅ Cleaned {fname}: {len(df_clean)} rows → {outfile}")
+        print(f"Cleaned {fname}: {len(df_clean)} rows → {outfile}")
 
-    # 2) VALIDATION step
+    # VALIDATION step
     tol = 1e-6  # µm tolerance for height comparison
     all_passed = True
 
@@ -73,12 +73,12 @@ def main():
 
         # Check row counts
         if len(cleaned_mem) != len(proc_df):
-            print(f"❌ {fname}: Row count mismatch raw→proc: {len(cleaned_mem)} vs {len(proc_df)}")
+            print(f" {fname}: Row count mismatch raw→proc: {len(cleaned_mem)} vs {len(proc_df)}")
             all_passed = False
 
         # Check Position column
         if not cleaned_mem["Position"].equals(proc_df["Position"]):
-            print(f"❌ {fname}: Position column mismatch")
+            print(f" {fname}: Position column mismatch")
             all_passed = False
 
         # Check Height within tolerance
@@ -86,18 +86,18 @@ def main():
         maxdiff = diffs.max()
         if maxdiff > tol:
             idx = diffs.idxmax()
-            print(f"❌ {fname}: Height mismatch max diff = {maxdiff:.2e} µm at row {idx}")
+            print(f" {fname}: Height mismatch max diff = {maxdiff:.2e} µm at row {idx}")
             print("   raw:", cleaned_mem.iloc[idx].to_dict())
             print("  proc:", proc_df.iloc[idx].to_dict())
             all_passed = False
         else:
-            print(f"✅ {fname}: Height match within {tol} µm (max diff {maxdiff:.2e})")
+            print(f" {fname}: Height match within {tol} µm (max diff {maxdiff:.2e})")
 
     if all_passed:
-        print("\n🎉 All files cleaned and validated successfully!")
+        print("\n All files cleaned and validated successfully!")
         sys.exit(0)
     else:
-        print("\n⚠️ Some validation checks failed.")
+        print("\n Some validation checks failed.")
         sys.exit(1)
 
 if __name__ == "__main__":
