@@ -1,0 +1,6 @@
+pandas
+numpy
+matplotlib
+Pillow
+opencv-python
+jupyter>=1.0.0
